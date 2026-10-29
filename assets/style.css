@@ -435,3 +435,8 @@ main section:first-child{padding-top:34px}
 #explorar .pc .art,#guardados .pc .art{aspect-ratio:4/3}
 .galdlg .gg{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
 .galdlg figure img{aspect-ratio:3/2}
+
+/* portada con foto */
+.hero2 .box{min-height:660px}
+.hero2 img.bgart{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+@media (max-width:760px){.hero2 .box{min-height:0}.hero2 img.bgart{position:static;order:2;display:block;width:100%;height:360px;object-position:50% 50%}}

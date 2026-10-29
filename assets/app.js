@@ -13,7 +13,7 @@ var BASE=(_s&&_s.src||'').replace(/app\.js(\?.*)?$/,'');
 function foto(f,a,logo){return '<img class="art" src="'+BASE+'img/'+f+'" alt="'+a+'" loading="lazy" width="500" height="300"'+(logo?' style="object-fit:contain;background:'+(typeof logo==='string'?logo:'#F2EEEB')+'"':'')+'>'}
 PR.campovivo={n:'Campo Vivo',d:'Montevideo',tag:'Productores hortícolas',desc:'Productores hortícolas en Rincón del Cerro, sobre el Camino Pajas Blancas.',pr:'',badge:'Productor real',rt:'',ig:'campovivo_71',wa:'59891456068',real:1};
 PR.criador={n:'Criador de ganado',d:'Florida',tag:'Ganadería · San Gabriel',desc:'Criador de ganado de San Gabriel, visitado en las gestiones de campo del proyecto.',pr:'',badge:'Productor real',rt:'',real:1};
-PR.chepastor={n:'Che Pastor',d:'Canelones',tag:'Granja familiar',desc:'Granja familiar en tiempos libres, en Los Cerrillos. Produce huevos y verduras de estación.',pr:'',badge:'Productor real',rt:'',ig:'chepartor.uy',real:1};
+PR.chepastor={n:'Che Pastor',d:'Canelones',tag:'Granja familiar',desc:'Granja familiar en tiempos libres, en Los Cerrillos. Produce huevos y verduras de estación.',pr:'',badge:'Productor real',rt:'',ig:'chepastor.uy',real:1};
 PR.suculentas={n:'Suculentas Adriana',d:'Canelones',tag:'Suculentas',desc:'Suculentas pequeñas muy resistentes para tu maceta. De Rincón de Pando.',pr:'',badge:'Productor real',rt:'',ig:'adriana.falero.146',wa:'59899061190',real:1};
 ART.campovivo=foto('campo-vivo-logo.jpg','Logo de Campo Vivo','#fff');
 ART.criador=foto('campo-vivo-vaca.jpg','Ganado en el campo de San Gabriel, Florida');
