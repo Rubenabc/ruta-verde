@@ -104,18 +104,43 @@
 <section id="registro" class="alt"><div class="wrap">
   <div class="eb">Sumate</div>
   <h2>Registrate como productor</h2>
-  <p class="sub">Dejá tus datos y el equipo se pone en contacto para activar tu perfil. Arrancás con 30 días del Plan Premium sin costo.</p>
+  <p class="sub">En cuatro pasos: tus datos, dónde estás, el plan y los términos. Arrancás con 30 días del Plan Premium sin costo, y el equipo se pone en contacto para activar tu perfil.</p>
   <form class="panel" id="regf" onsubmit="return false" novalidate>
+    <h3>1. Tus datos</h3>
     <div class="form">
-      <label class="f">Nombre del emprendimiento<input type="text" id="g-n" autocomplete="organization"></label>
-      <label class="f">Departamento<select id="g-d"><option>Artigas</option><option>Canelones</option><option>Cerro Largo</option><option>Colonia</option><option>Durazno</option><option>Flores</option><option>Florida</option><option>Lavalleja</option><option>Maldonado</option><option>Montevideo</option><option>Paysandú</option><option>Río Negro</option><option>Rivera</option><option>Rocha</option><option>Salto</option><option>San José</option><option>Soriano</option><option>Tacuarembó</option><option>Treinta y Tres</option></select></label>
-      <label class="f">Qué ofrecés<select id="g-t"><option>Alimentos</option><option>Artesanías</option><option>Experiencias</option></select></label>
-      <label class="f">Plan que te interesa<select id="g-p"><option>Gratuito</option><option>Estándar</option><option>Premium</option></select></label>
+      <label class="f">Nombre del emprendimiento<input type="text" id="g-n" autocomplete="organization" placeholder="Ej.: Granja El Ombú"></label>
+      <label class="f">Tu nombre o el de tu familia<input type="text" id="g-f" autocomplete="name" placeholder="Ej.: Familia Acosta"></label>
       <label class="f">WhatsApp<input type="tel" id="g-w" inputmode="tel" autocomplete="tel" placeholder="09X XXX XXX"></label>
+      <label class="f">Qué ofrecés<select id="g-t"><option>Verduras</option><option>Frutas</option><option>Verduras y frutas</option><option>Huevos</option><option>Plantas</option><option>Otros productos de granja</option></select></label>
     </div>
-    <label class="switch"><input type="checkbox" id="g-ok"> Acepto la Declaración Jurada Digital y los términos</label>
-    <button class="btn" type="button" id="g-go">Enviar solicitud</button>
-    <div id="g-msg" role="status" aria-live="polite" style="margin-top:12px;font-weight:700"></div>
+    <h3>2. Dónde está tu finca</h3>
+    <div class="form">
+      <label class="f">Departamento<select id="g-d"><option value="">Elegí tu departamento</option><option>Artigas</option><option>Canelones</option><option>Cerro Largo</option><option>Colonia</option><option>Durazno</option><option>Flores</option><option>Florida</option><option>Lavalleja</option><option>Maldonado</option><option>Montevideo</option><option>Paysandú</option><option>Río Negro</option><option>Rivera</option><option>Rocha</option><option>Salto</option><option>San José</option><option>Soriano</option><option>Tacuarembó</option><option>Treinta y Tres</option></select></label>
+      <label class="f">Localidad, paraje o camino<input type="text" id="g-l" placeholder="Ej.: Camino Pajas Blancas, Rincón del Cerro"></label>
+      <button class="btn out" type="button" id="g-geo">Usar la ubicación de mi celular</button>
+    </div>
+    <p class="demo" id="g-geomsg" aria-live="polite" style="margin-top:-4px">Es la ubicación que va a abrir el botón «Cómo llegar con Google Maps» en tu ficha. Si preferís, poné solo la zona.</p>
+    <h3>3. Elegí tu plan</h3>
+    <div class="gseg" id="g-per" role="group" aria-label="Forma de pago" style="margin:6px 0 12px"><button type="button" data-a="0" aria-pressed="true">Mensual</button><button type="button" data-a="1" aria-pressed="false">Anual con descuento</button></div>
+    <div class="planes" role="radiogroup" aria-label="Plan">
+      <label class="plan"><input type="radio" name="g-plan" value="Gratuito"><span class="pn">Gratuito</span><span class="pp" data-m="$0" data-y="$0">$0</span><small class="pu" data-m="para siempre" data-y="para siempre">para siempre</small><ul><li>Hasta 5 productos</li><li>Ficha con tus datos de contacto</li><li>Punto en el mapa</li><li>Sello Verde provisional</li></ul></label>
+      <label class="plan"><input type="radio" name="g-plan" value="Estándar"><span class="pn">Estándar</span><span class="pp" data-m="$400" data-y="$4.000">$400</span><small class="pu" data-m="UYU por mes" data-y="UYU por año · ahorrás $800">UYU por mes</small><ul><li>Hasta 20 productos</li><li>Botón de WhatsApp y llamada</li><li>Cuántas personas vieron tu perfil</li><li>Cómo llegar con Google Maps</li></ul></label>
+      <label class="plan top"><input type="radio" name="g-plan" value="Premium" checked><span class="rib">30 días gratis</span><span class="pn">Premium</span><span class="pp" data-m="$800" data-y="$7.800">$800</span><small class="pu" data-m="UYU por mes" data-y="UYU por año · ahorrás $1.800">UYU por mes</small><ul><li>Productos ilimitados, fotos y video</li><li>Punto destacado en el mapa</li><li>Rutas turísticas sugeridas</li><li>Sello Verde verificado con visita a tu finca</li></ul></label>
+    </div>
+    <p class="demo">Ruta Verde no cobra comisión por tus ventas: el dinero va directo a vos.</p>
+    <h3 id="terminos">4. Términos y condiciones</h3>
+    <p class="demo" style="margin:0 0 8px">Leelos antes de seguir. También están en la página <a href="../terminos/">Términos y condiciones</a>.</p>
+    <div class="terms" tabindex="0" role="region" aria-label="Texto de los términos y condiciones">
+<h4>Qué es Ruta Verde</h4><p>Ruta Verde SAS es una vitrina digital que conecta productores familiares con consumidores y turistas. No vende productos ni cobra comisión por las ventas (Ley 17.250 de Defensa del Consumidor).</p>
+<h4>Tus datos personales</h4><p>Tratamos tus datos según la Ley 18.331 de Protección de Datos Personales. Vos decidís qué se muestra. La ubicación de cada finca se muestra aproximada hasta que se concreta un contacto.</p>
+<h4>Compras y pagos</h4><p>Los precios, el pago y la entrega se acuerdan directamente entre el productor y quien compra.</p>
+<h4>Opiniones</h4><p>Las reseñas se revisan antes de publicarse. Podés denunciar contenido falso o inapropiado.</p>
+<h4>Para productores</h4><p>Declarás que tus datos son verdaderos y que estás registrado como productor familiar en el MGAP. Nos permitís mostrar tus fotos y descripciones para promocionar tu perfil. Tu prueba Premium dura 30 días; después pasás al plan Gratuito si no elegís un plan pago. Podés dar de baja un plan pago con 5 días hábiles de aviso.</p>
+<h4>Ley aplicable</h4><p>Rigen las leyes de Uruguay y los tribunales de Montevideo.</p>
+    </div>
+    <label class="switch"><input type="checkbox" id="g-ok"> Leí y acepto los términos y condiciones, la política de privacidad y la Declaración Jurada Digital</label>
+    <button class="btn" type="button" id="g-go" disabled>Aceptar y crear mi perfil</button>
+    <div id="g-msg" role="status" aria-live="polite" style="margin-top:12px"></div>
     <p class="demo">Formulario de demostración: no guarda ni envía ningún dato.</p>
   </form>
 </div></section>
@@ -123,7 +148,7 @@
 <footer id="contacto"><div class="wrap">
   <div class="fgrid">
     <div><span class="lg flogo" role="img" aria-label="Logo de Ruta Verde"></span><p><b>Ruta Verde</b><br>Conectamos orígenes, elegimos futuro.</p></div>
-    <div><h4>Navegá</h4><a href="../">Inicio</a><a href="../mapa/">Mapa</a><a href="../productores/">Productores</a><a href="../confianza/">Confianza</a><a href="../preguntas/">Preguntas</a><a href="../proyecto/">Proyecto</a></div>
+    <div><h4>Navegá</h4><a href="../">Inicio</a><a href="../mapa/">Mapa</a><a href="../productores/">Productores</a><a href="../confianza/">Confianza</a><a href="../preguntas/">Preguntas</a><a href="../proyecto/">Proyecto</a><a href="../terminos/">Términos y condiciones</a></div>
     <div><h4>Contacto</h4><p>Proyecto educativo de la Escuela Superior de Comercio Villa Muñoz (UTU-ETP), Montevideo. Las consultas se canalizan a través de la institución.</p><p><a href="https://www.instagram.com/proyecto.rutaverde/" target="_blank" rel="noopener">Instagram: @proyecto.rutaverde</a></p></div>
     <div id="privacidad"><h4>Privacidad</h4><p>Esta demostración no guarda ni envía datos personales. En la versión real, Ruta Verde cumple la Ley N.º 18.331 de protección de datos personales: la ubicación se usa solo para navegar y cada productor acepta de forma expresa qué datos se muestran al público.</p></div>
   </div>

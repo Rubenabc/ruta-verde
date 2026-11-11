@@ -12,24 +12,19 @@ var _s=document.currentScript||document.querySelector('script[src*="assets/app.j
 var BASE=(_s&&_s.src||'').replace(/app\.js(\?.*)?$/,'');
 function foto(f,a,logo){return '<img class="art" src="'+BASE+'img/'+f+'" alt="'+a+'" loading="lazy" width="500" height="300"'+(logo?' style="object-fit:contain;background:'+(typeof logo==='string'?logo:'#F2EEEB')+'"':'')+'>'}
 PR.campovivo={n:'Campo Vivo',d:'Montevideo',tag:'Productores hortícolas',desc:'Productores hortícolas en Rincón del Cerro, sobre el Camino Pajas Blancas.',pr:'',badge:'Productor real',rt:'',ig:'campovivo_71',wa:'59891456068',real:1};
-PR.criador={n:'Criador de ganado',d:'Florida',tag:'Ganadería · San Gabriel',desc:'Criador de ganado de San Gabriel, visitado en las gestiones de campo del proyecto.',pr:'',badge:'Productor real',rt:'',real:1};
 PR.chepastor={n:'Che Pastor',d:'Canelones',tag:'Granja familiar',desc:'Granja familiar en tiempos libres, en Los Cerrillos. Produce huevos y verduras de estación.',pr:'',badge:'Productor real',rt:'',ig:'chepastor.uy',real:1};
 PR.suculentas={n:'Suculentas Adriana',d:'Canelones',tag:'Suculentas',desc:'Suculentas pequeñas muy resistentes para tu maceta. De Rincón de Pando.',pr:'',badge:'Productor real',rt:'',ig:'adriana.falero.146',wa:'59899061190',real:1};
 ART.campovivo=foto('campo-vivo-logo.jpg','Logo de Campo Vivo','#fff');
-ART.criador=foto('campo-vivo-vaca.jpg','Ganado en el campo de San Gabriel, Florida');
 ART.chepastor=foto('che-pastor-logo.jpg','Logo de Che Pastor, huerta agroecológica',true);
 ART.suculentas=foto('suculentas-adriana-plantines.jpg','Plantines de suculentas de Suculentas Adriana');
-ORDER=['campovivo','chepastor','suculentas','criador'].concat(ORDER);
-var GAL={criador:{fotos:[
-  ['campo-vivo-vaca.jpg','Ganadería en San Gabriel (Florida)'],['campo-vivo-naranjo.jpg','Naranjo con fruta'],
-  ['campo-vivo-ganado-eucaliptos.jpg','Ganado bajo los eucaliptos'],['campo-vivo-flores.jpg','Flores del campo'],
-  ['campo-vivo-campo-florido.jpg','Campo con flores'],['campo-vivo-camino.jpg','Camino de tierra al campo']],
-  videos:[['campo-vivo-agua.mp4','campo-vivo-agua-poster.jpg','Agua en el campo'],['campo-vivo-llegada.mp4','campo-vivo-llegada-poster.jpg','Recorrido por el campo']]}};
+ORDER=['campovivo','chepastor','suculentas'].concat(ORDER);
+var GAL={};
 GAL.suculentas={fotos:[['suculentas-adriana-plantines.jpg','Plantines de suculentas'],['suculentas-adriana-puesto.jpg','El puesto de Suculentas Adriana en la feria']]};
 function extras(id){
   var p=PR[id],w=el('div','mini');
   if(p.ig){var a=el('a','btn sm','Instagram');a.href='https://www.instagram.com/'+p.ig+'/';a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','Instagram de '+p.n+' (se abre en otra pestaña)');w.appendChild(a)}
   if(p.wa){var wa=el('a','btn sm','WhatsApp');wa.href='https://wa.me/'+p.wa+'?text='+encodeURIComponent('Hola, te encontré en Ruta Verde.');wa.target='_blank';wa.rel='noopener';wa.setAttribute('aria-label','WhatsApp de '+p.n+' (se abre en otra pestaña)');w.appendChild(wa)}
+  var gm=btnMaps(id);if(gm)w.appendChild(gm);
   if(GAL[id]){var g=el('button','btn sm gal','Ver fotos y video');g.type='button';g.setAttribute('data-g',id);w.appendChild(g)}
   return w;
 }
@@ -75,6 +70,7 @@ function menu(){
 function tarjetas(){
   var list=$('list');if(!list)return;
   var cards=Array.prototype.slice.call(list.querySelectorAll('.pc'));
+  cards.forEach(function(c){var id=c.getAttribute('data-id'),mn=c.querySelector('.mini');if(mn&&!mn.querySelector('.gm')){var gm=btnMaps(id);if(gm)mn.appendChild(gm)}});
   cards.forEach(function(c){var id=c.getAttribute('data-id'),mn=c.querySelector('.mini');if(mn&&GAL[id]&&!mn.querySelector('.gal')){var g=el('button','btn sm gal','Ver fotos y video');g.type='button';g.setAttribute('data-g',id);mn.appendChild(g)}});
   function pinta(){cards.forEach(function(c){c.querySelector('.heart').setAttribute('aria-pressed',saved.indexOf(c.getAttribute('data-id'))>-1)})}
   refrescos.push(pinta);
@@ -110,32 +106,87 @@ function tarjetas(){
 }
 
 /* ---- mapa de productores y guardados ---- */
-var POS={Artigas:[1,0],Salto:[0,1],Rivera:[3,1],'Paysandú':[0,2],'Tacuarembó':[2,2],'Cerro Largo':[4,2],'Río Negro':[0,3],Durazno:[2,3],'Treinta y Tres':[4,3],Soriano:[0,4],Flores:[1,4],Florida:[2,4],Lavalleja:[3,4],Rocha:[4,4],Colonia:[0,5],'San José':[1,5],Canelones:[2,5],Maldonado:[3,5],Montevideo:[2,6]};
+/* Ubicación de cada productor para el mapa: [latitud, longitud]. Los puntos son aproximados.
+   gm: lo que abre «Cómo llegar con Google Maps». Puede ser una dirección o un enlace de Google Maps
+   copiado desde la app (Compartir → Copiar enlace). Solo se muestra en los productores reales. */
+var GEO={
+  campovivo:{ll:[-34.835,-56.360],gm:'Camino Pajas Blancas, Rincón del Cerro, Montevideo'},
+  chepastor:{ll:[-34.600,-56.355],gm:'Los Cerrillos, Canelones'},
+  suculentas:{ll:[-34.715,-55.945],gm:'Rincón de Pando, Canelones'},
+  ceibo:{ll:[-34.300,-57.600]},aromos:{ll:[-34.330,-56.700]},quesos:{ll:[-34.560,-56.120]},
+  posada:{ll:[-34.250,-57.950]},lana:{ll:[-34.470,-56.880]}
+};
+function gmaps(id){
+  var g=GEO[id];if(!g||!g.gm||!PR[id]||!PR[id].real)return '';
+  return /^https?:\/\//.test(g.gm)?g.gm:'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(g.gm);
+}
+function btnMaps(id){
+  var u=gmaps(id);if(!u)return null;
+  var a=el('a','btn sm gm','Cómo llegar con Google Maps');a.href=u;a.target='_blank';a.rel='noopener';
+  a.setAttribute('aria-label','Cómo llegar a '+PR[id].n+' con Google Maps (se abre en otra pestaña)');return a;
+}
+var ZONAS={metro:{w:-56.55,e:-55.75,n:-34.38,s:-34.98},uy:{w:-59.25,e:-52.75,n:-29.9,s:-35.15}};
+var BORDE=[[-58.43,-33.90],[-58.40,-33.45],[-58.32,-33.10],[-58.17,-32.65],[-58.10,-32.30],[-57.92,-31.85],[-57.98,-31.40],[-57.80,-30.95],[-57.62,-30.20],[-57.10,-30.10],[-56.50,-30.38],[-56.00,-30.62],[-55.55,-30.87],[-55.10,-31.25],[-54.55,-31.50],[-54.10,-31.90],[-53.65,-32.15],[-53.25,-32.55],[-53.10,-33.05],[-53.45,-33.55],[-53.48,-33.69]];
+var COSTA=[[-53.48,-33.69],[-53.78,-34.40],[-54.15,-34.67],[-54.60,-34.85],[-54.95,-34.97],[-55.05,-34.90],[-55.40,-34.80],[-55.80,-34.84],[-55.95,-34.86],[-56.05,-34.89],[-56.13,-34.905],[-56.20,-34.915],[-56.26,-34.90],[-56.33,-34.89],[-56.40,-34.86],[-56.44,-34.80],[-56.75,-34.68],[-57.00,-34.55],[-57.43,-34.45],[-57.85,-34.47],[-58.20,-34.15],[-58.43,-33.90]];
+var CAPS=[['Artigas',-30.40,-56.47],['Melo',-32.37,-54.17],['Colonia',-34.47,-57.84],['Durazno',-33.38,-56.52],['Trinidad',-33.52,-56.90],['Florida',-34.10,-56.21],['Minas',-34.37,-55.23],['Maldonado',-34.90,-54.95],['Montevideo',-34.88,-56.17],['Paysandú',-32.32,-58.08],['Fray Bentos',-33.13,-58.30],['Rivera',-30.90,-55.55],['Rocha',-34.48,-54.33],['Salto',-31.39,-57.96],['San José',-34.34,-56.71],['Mercedes',-33.25,-58.03],['Tacuarembó',-31.71,-55.98],['Treinta y Tres',-33.23,-54.38],['Canelones',-34.52,-56.28]];
+function proy(z){
+  var b=ZONAS[z],mid=(b.n+b.s)/2*Math.PI/180,W=360,H=Math.round(W*(b.n-b.s)/((b.e-b.w)*Math.cos(mid)));
+  return {W:W,H:H,px:function(lon,lat){return [(lon-b.w)/(b.e-b.w)*W,(lat-b.n)/(b.s-b.n)*H]}};
+}
+function enZona(id,z){var g=GEO[id];if(!g)return false;var b=ZONAS[z];return g.ll[1]>b.w&&g.ll[1]<b.e&&g.ll[0]<b.n&&g.ll[0]>b.s}
+function pinSVG(x,y,s){return '<g transform="translate('+x.toFixed(1)+' '+y.toFixed(1)+') scale('+s+')"><ellipse cx="0" cy="0" rx="8" ry="2.4" class="ring"/><path class="lh" d="M0 0 C-4 -9 -13 -14 -13 -22 A13 13 0 0 1 0 -35 Z"/><path class="rh" d="M0 0 C4 -9 13 -14 13 -22 A13 13 0 0 0 0 -35 Z"/><circle cx="0" cy="-22" r="8" fill="#fff"/><path d="M0 -16 V-22" stroke="#0E401F" stroke-width="1.6" stroke-linecap="round"/><path class="lf" d="M-0.4 -21 C-5 -20.5 -7.5 -24 -6.5 -27.5 C-2.5 -27.5 -0.4 -25 -0.4 -21Z"/><path class="lf2" d="M0.4 -22 C1 -26.5 4 -28.6 7 -28.6 C7 -25 4.2 -22.2 0.4 -22Z"/></g>'}
+function mapaSVG(z,cur){
+  var P=proy(z),px=P.px;
+  function pt(c){return px(c[0],c[1]).map(function(v){return v.toFixed(1)}).join(',')}
+  function tx(t){return String(t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  var uy='M'+BORDE.concat(COSTA.slice(1)).map(pt).join(' L')+'Z';
+  var agua='M'+[[-52.6,-33.0],[-53.15,-33.35]].concat(COSTA).concat([[-58.6,-33.95],[-59.4,-33.95],[-59.4,-35.4],[-52.6,-35.4]]).map(pt).join(' L')+'Z';
+  var g='<rect class="g-vec" width="'+P.W+'" height="'+P.H+'"/><path class="g-agua" d="'+agua+'"/><path class="g-rio" d="M'+BORDE.slice(0,9).map(pt).join(' L')+'"/><path class="g-uy" d="'+uy+'"/>';
+  function pueblo(n,lon,lat,dx,dy){var c=px(lon,lat);return '<circle cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" r="2.2" class="g-dot"/><text class="g-lugar" x="'+(c[0]+dx).toFixed(1)+'" y="'+(c[1]+dy).toFixed(1)+'">'+n+'</text>'}
+  if(z==='metro'){
+    g+='<path class="g-rio2" d="M'+pt([-56.47,-34.40])+' C'+pt([-56.42,-34.55])+' '+pt([-56.48,-34.66])+' '+pt([-56.42,-34.78])+'"/>';
+    [[[-56.19,-34.89],[-56.24,-34.75],[-56.28,-34.52],[-56.30,-34.40]],[[-56.17,-34.88],[-56.06,-34.73],[-55.95,-34.62],[-55.80,-34.52]]].forEach(function(r){var d='M'+r.map(pt).join(' L');g+='<path class="g-ruta-b" d="'+d+'"/><path class="g-ruta" d="'+d+'"/>'});
+    var c=px(-56.18,-34.86);g+='<ellipse class="g-ciudad" cx="'+c[0].toFixed(1)+'" cy="'+c[1].toFixed(1)+'" rx="30" ry="12"/>';
+    var w=px(-56.35,-34.945);g+='<text class="g-agua-t" x="'+w[0].toFixed(1)+'" y="'+w[1].toFixed(1)+'">Río de la Plata</text>';
+    g+=pueblo('Montevideo',-56.165,-34.885,8,-6)+pueblo('Canelones',-56.28,-34.52,-60,4)+pueblo('Las Piedras',-56.22,-34.73,7,4)+pueblo('Pando',-55.96,-34.72,7,4)+pueblo('Santa Lucía',-56.39,-34.45,7,4);
+  }else{
+    CAPS.forEach(function(k){g+=pueblo(k[0],k[2],k[1],4,-4).replace('class="g-lugar"','class="g-lugar sm"')});
+    var t=function(n,lon,lat,cl){var q=px(lon,lat);return '<text class="'+cl+'" x="'+q[0].toFixed(1)+'" y="'+q[1].toFixed(1)+'">'+n+'</text>'};
+    g+=t('Brasil',-55.2,-30.25,'g-pais')+t('Argentina',-59.15,-32.9,'g-pais')+t('Río de la Plata',-57.6,-34.85,'g-agua-t')+t('Océano Atlántico',-54.6,-35.05,'g-agua-t');
+    var b=ZONAS.metro,a1=px(b.w,b.n),a2=px(b.e,b.s);
+    g+='<rect class="g-caja" x="'+a1[0].toFixed(1)+'" y="'+a1[1].toFixed(1)+'" width="'+(a2[0]-a1[0]).toFixed(1)+'" height="'+(a2[1]-a1[1]).toFixed(1)+'" rx="3"/>';
+  }
+  var s=z==='uy'?.62:1,ids=ORDER.filter(function(id){return enZona(id,z)});
+  ids.sort(function(a,b){return (a===cur)-(b===cur)});
+  ids.forEach(function(id){
+    var q=px(GEO[id].ll[1],GEO[id].ll[0]),sel=id===cur;
+    g+='<g class="gpin'+(PR[id].real?'':' ej')+(sel?' sel':'')+'" data-id="'+id+'" tabindex="0" role="button" aria-pressed="'+sel+'" aria-label="'+tx(PR[id].n+', '+PR[id].d)+'"><title>'+tx(PR[id].n)+'</title>'+(sel?'<circle class="halo" cx="'+q[0].toFixed(1)+'" cy="'+(q[1]-22*s*1.2).toFixed(1)+'" r="'+(22*s*1.2).toFixed(1)+'"/>':'')+pinSVG(q[0],q[1],sel?s*1.2:s)+'</g>';
+  });
+  return '<svg viewBox="0 0 '+P.W+' '+P.H+'" role="group" aria-label="'+(z==='uy'?'Mapa de Uruguay con productores':'Mapa de Montevideo y Canelones con productores')+'">'+g+'</svg>';
+}
 function flash(e){if(!e)return;e.classList.remove('flash');void e.offsetWidth;e.classList.add('flash')}
 function mapa(){
-  var tb=$('ptiles'),ml=$('mlist'),pop=$('pop');
+  var tb=$('gmap'),ml=$('mlist'),pop=$('pop');
   if(tb&&ml&&pop){
-    var cur='chepastor';
-    function porDepto(d){return ORDER.filter(function(k){return PR[k].d===d})}
+    var cur='campovivo',zona='metro',zb=document.querySelectorAll('#gzona button');
     function art(id){var d=document.createElement('div');d.innerHTML=ART[id];var a=d.firstChild;a.removeAttribute('class');return a}
+    function elegir(id,foco){cur=id;if(!enZona(id,zona))zona='uy';pinta();flash(pop);
+      if(!foco&&window.innerWidth<760&&tb.scrollIntoView)tb.scrollIntoView({behavior:'smooth',block:'center'});
+      if(foco){var p=tb.querySelector('.gpin[data-id="'+id+'"]');if(p)p.focus()}}
+    each(zb,function(b){b.addEventListener('click',function(){zona=b.getAttribute('data-z');pinta()})});
+    tb.addEventListener('click',function(e){var p=e.target.closest&&e.target.closest('.gpin');if(p)elegir(p.getAttribute('data-id'),true)});
+    tb.addEventListener('keydown',function(e){var p=e.target.closest&&e.target.closest('.gpin');if(p&&(e.key==='Enter'||e.key===' ')){e.preventDefault();elegir(p.getAttribute('data-id'),true)}});
     function pinta(){
-      tb.textContent='';
-      Object.keys(POS).forEach(function(d){
-        var ids=porDepto(d),t=el('button','pt'+(ids.length?' has':'')+(ids.indexOf(cur)>-1?' sel':''));
-        t.type='button';t.style.gridColumn=POS[d][0]+1;t.style.gridRow=POS[d][1]+1;t.textContent=d;
-        if(ids.length){t.appendChild(el('span','pin',ids.length>1?String(ids.length):'●'));
-          t.addEventListener('click',function(){cur=(ids.indexOf(cur)>-1&&ids.length>1)?ids[(ids.indexOf(cur)+1)%ids.length]:ids[0];pinta();flash(pop)})}
-        else{t.disabled=true}
-        tb.appendChild(t);
-      });
+      each(zb,function(b){b.setAttribute('aria-pressed',b.getAttribute('data-z')===zona)});
+      tb.innerHTML=mapaSVG(zona,cur);
       ml.textContent='';
       ORDER.forEach(function(id){
         var b=el('button','mi');b.type='button';b.setAttribute('aria-pressed',id===cur);b.appendChild(art(id));
         var d=el('div');d.appendChild(el('b','',PR[id].n));d.appendChild(el('small','',[PR[id].tag,PR[id].d].filter(Boolean).join(' · ')));b.appendChild(d);
-        b.addEventListener('click',function(){cur=id;pinta();flash(pop)});ml.appendChild(b);
+        b.addEventListener('click',function(){elegir(id)});ml.appendChild(b);
       });
       pop.textContent='';pop.appendChild(art(cur));
-      var dd=el('div');dd.style.flex='1';dd.appendChild(el('b','',PR[cur].n));dd.appendChild(el('small','',[PR[cur].d,PR[cur].rt?'★ '+PR[cur].rt:''].filter(Boolean).join(' · ')));dd.appendChild(extras(cur));pop.appendChild(dd);
+      var dd=el('div');dd.style.flex='1';dd.appendChild(el('b','',PR[cur].n));dd.appendChild(el('small','',[PR[cur].d,PR[cur].rt?'★ '+PR[cur].rt:'',PR[cur].real?'':'Ejemplo ficticio'].filter(Boolean).join(' · ')));dd.appendChild(extras(cur));pop.appendChild(dd);
       var g=el('button','btn sm',saved.indexOf(cur)>-1?'♥ Guardado':'♡ Guardar');g.type='button';
       g.setAttribute('aria-pressed',saved.indexOf(cur)>-1);g.addEventListener('click',function(){toggle(cur)});pop.appendChild(g);
     }
@@ -267,17 +318,78 @@ function recomendador(){
     var o=$('r-out');o.textContent='';
     var box=el('div','res ok');box.appendChild(el('b','big','Plan '+plan));box.appendChild(el('span','',precio+' · '+anual));
     var ul=el('ul');ul.style.margin='8px 0 0';ul.style.paddingLeft='20px';r.forEach(function(x){ul.appendChild(el('li','',x))});box.appendChild(ul);
-    box.appendChild(el('p','demo','Al registrarte, probás el Plan Premium 30 días sin costo.'));o.appendChild(box);
+    box.appendChild(el('p','demo','Al registrarte, probás el Plan Premium 30 días sin costo.'));
+    var eb=el('button','btn sm elegir-plan','Elegir este plan y registrarme');eb.type='button';eb.setAttribute('data-p',plan);box.appendChild(eb);o.appendChild(box);
   });
 }
 function registro(){
-  var go=$('g-go');if(!go)return;var msg=$('g-msg');
+  var go=$('g-go');if(!go)return;var msg=$('g-msg'),ok=$('g-ok'),geo=null;
+  ok.addEventListener('change',function(){go.disabled=!ok.checked});go.disabled=!ok.checked;
+  /* mensual / anual */
+  var per=document.querySelectorAll('#g-per button');
+  each(per,function(b){b.addEventListener('click',function(){
+    var y=b.getAttribute('data-a')==='1';each(per,function(x){x.setAttribute('aria-pressed',x===b)});
+    each(document.querySelectorAll('#regf .pp,#regf .pu'),function(e){e.textContent=e.getAttribute(y?'data-y':'data-m')});
+  })});
+  /* ubicación del celular */
+  var gb=$('g-geo'),gm=$('g-geomsg');
+  if(gb)gb.addEventListener('click',function(){
+    if(!navigator.geolocation){gm.textContent='Este navegador no da la ubicación. Escribí la localidad.';return}
+    gb.textContent='Buscando tu ubicación…';
+    navigator.geolocation.getCurrentPosition(function(pos){
+      var la=pos.coords.latitude,lo=pos.coords.longitude;gb.textContent='Usar la ubicación de mi celular';
+      if(la>-35.2&&la<-30&&lo>-58.6&&lo<-53){geo=[la,lo];gm.textContent='Listo: usamos la ubicación de tu celular ('+la.toFixed(4)+', '+lo.toFixed(4)+').'}
+      else gm.textContent='Tu ubicación parece estar fuera de Uruguay. Elegí el departamento y escribí la localidad.';
+    },function(){gb.textContent='Usar la ubicación de mi celular';gm.textContent='No pudimos obtener tu ubicación. Elegí el departamento y escribí la localidad.'},{timeout:8000});
+  });
+  function err(t,f){msg.textContent='';var b=el('div','res no');b.appendChild(el('b','',t));msg.appendChild(b);if(f)$(f).focus()}
   go.addEventListener('click',function(){
-    var n=$('g-n').value.trim(),ok=$('g-ok').checked;
-    if(!n){msg.textContent='Escribí el nombre de tu emprendimiento.';msg.style.color='#B3261E';$('g-n').focus();return}
-    if(!ok){msg.textContent='Para continuar, aceptá la Declaración Jurada Digital y los términos.';msg.style.color='#B3261E';return}
-    msg.style.color='';
-    msg.textContent='¡Gracias, '+n+'! En la versión real, tu solicitud llega al equipo de Ruta Verde, que te contacta para activar tu perfil con el plan '+$('g-p').value+'. Esta es una demostración: no se envió ningún dato.';
+    var n=$('g-n').value.trim(),fa=$('g-f').value.trim(),w=$('g-w').value.trim(),d=$('g-d').value,l=$('g-l').value.trim();
+    var pl=document.querySelector('input[name="g-plan"]:checked'),anual=document.querySelector('#g-per [data-a="1"]').getAttribute('aria-pressed')==='true';
+    if(!n)return err('Escribí el nombre de tu emprendimiento.','g-n');
+    if(!/^0?9\d[\s-]?\d{3}[\s-]?\d{3}$/.test(w))return err('Escribí un celular uruguayo, por ejemplo 099 123 456.','g-w');
+    if(!d&&!geo)return err('Elegí tu departamento o usá la ubicación de tu celular.','g-d');
+    if(!pl)return err('Elegí un plan.');
+    if(!ok.checked)return err('Para continuar, aceptá los términos y condiciones.');
+    var q=geo?geo[0].toFixed(5)+','+geo[1].toFixed(5):[l,d,'Uruguay'].filter(Boolean).join(', ');
+    var lugar=geo?'la ubicación de tu celular':([l,d].filter(Boolean).join(', '));
+    msg.textContent='';var b=el('div','res ok');
+    b.appendChild(el('b','big','¡Listo, '+n+'!'));
+    var ul=el('ul');ul.style.margin='8px 0 0';ul.style.paddingLeft='20px';
+    [(fa?fa+' · ':'')+'WhatsApp '+w,'Ubicación: '+lugar,'Plan '+pl.value+(pl.value==='Gratuito'?'':(anual?', pago anual':', pago mensual'))+'. Empezás con 30 días del Plan Premium sin costo.','Términos y condiciones aceptados.'].forEach(function(x){ul.appendChild(el('li','',x))});
+    b.appendChild(ul);
+    var a=el('a','btn sm gm','Ver tu ubicación en Google Maps');a.href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(q);a.target='_blank';a.rel='noopener';a.style.marginTop='12px';b.appendChild(a);
+    b.appendChild(el('p','demo','En la versión real, el equipo de Ruta Verde te contacta para activar tu perfil y tu punto aparece en el mapa. Esta es una demostración: no se envió ningún dato.'));
+    msg.appendChild(b);
+  });
+}
+/* recomendador → elegir el plan sugerido en el registro */
+document.addEventListener('click',function(e){
+  var b=e.target.closest&&e.target.closest('.elegir-plan');if(!b)return;
+  var r=document.querySelector('input[name="g-plan"][value="'+b.getAttribute('data-p')+'"]');
+  if(r){r.checked=true;var reg=$('registro');if(reg)reg.scrollIntoView({behavior:'smooth'});setTimeout(function(){r.focus()},400)}
+});
+
+/* ---- mapa: bienvenida y términos para clientes (se muestra una vez por navegador) ---- */
+function bienvenida(){
+  var g=$('bienv');if(!g)return;
+  var ok=false;try{ok=localStorage.getItem('rv-terminos-cliente')==='1'}catch(e){}
+  if(ok)return;
+  var p1=$('bv-1'),p2=$('bv-2'),chk=$('bv-ok'),go=$('bv-go');
+  g.hidden=false;document.documentElement.classList.add('bv-open');$('bv-t').focus();
+  function paso(n){p1.hidden=n!==1;p2.hidden=n!==2;$(n===1?'bv-t':'bv-t2').focus();g.querySelector('.bienv-in').scrollTop=0}
+  $('bv-cli').addEventListener('click',function(){paso(2)});
+  $('bv-volver').addEventListener('click',function(){paso(1)});
+  chk.addEventListener('change',function(){go.disabled=!chk.checked});
+  go.addEventListener('click',function(){
+    if(!chk.checked)return;try{localStorage.setItem('rv-terminos-cliente','1')}catch(e){}
+    g.hidden=true;document.documentElement.classList.remove('bv-open');
+    var m=$('mapa');if(m){m.scrollIntoView();var t=m.querySelector('h2');if(t){t.setAttribute('tabindex','-1');t.focus({preventScroll:true})}}
+  });
+  g.addEventListener('keydown',function(e){ /* mantener el foco dentro del cuadro */
+    if(e.key!=='Tab')return;var f=Array.prototype.filter.call(g.querySelectorAll('button,a,input,[tabindex="0"]'),function(x){return x.offsetParent&&!x.disabled});
+    if(!f.length)return;var a=f[0],z=f[f.length-1];
+    if(e.shiftKey&&document.activeElement===a){e.preventDefault();z.focus()}else if(!e.shiftKey&&document.activeElement===z){e.preventDefault();a.focus()}
   });
 }
 
@@ -300,5 +412,5 @@ function reveal(){
   each(els,function(e){io.observe(e)});
 }
 
-[menu,galeria,tarjetas,mapa,offline,verificador,fases,recomendador,registro,faq,reveal,conteo].forEach(function(f){try{f()}catch(e){if(window.console)console.error(f.name,e)}});
+[menu,galeria,tarjetas,mapa,bienvenida,offline,verificador,fases,recomendador,registro,faq,reveal,conteo].forEach(function(f){try{f()}catch(e){if(window.console)console.error(f.name,e)}});
 })();

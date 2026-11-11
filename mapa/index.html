@@ -37,13 +37,16 @@
 <div class="wrap pg-h"><div class="eb">Cerca de vos</div><h1>Mapa y lugares guardados</h1><p>Encontrá productores por departamento y guardá los que más te gusten para volver a verlos.</p></div>
 <section id="mapa"><div class="wrap">
   <h2>Mirá qué hay cerca de vos</h2>
-  <p class="sub">Asomate a los departamentos donde hay productores reales y de ejemplo. Elegí uno de la lista o tocá un departamento marcado.</p>
+  <p class="sub">Tocá un punto del mapa o elegí un productor de la lista. En los productores reales, el botón «Cómo llegar con Google Maps» te abre la ubicación para ir hasta ahí.</p>
   <div class="mapa">
     <div class="ml" id="mlist"></div>
     <div>
-      <div class="pmapbox"><div class="ptiles" id="ptiles" role="group" aria-label="Departamentos con productores"></div>
+      <div class="pmapbox">
+        <div class="gseg" id="gzona" role="group" aria-label="Zona del mapa"><button type="button" data-z="metro" aria-pressed="true">Montevideo y Canelones</button><button type="button" data-z="uy" aria-pressed="false">Todo Uruguay</button></div>
+        <div class="gmap" id="gmap"></div>
+        <div class="gley"><span><i class="gdot"></i>Productor real</span><span><i class="gdot ej"></i>Ejemplo ficticio</span></div>
         <div class="pop" id="pop" aria-live="polite"></div></div>
-      <p class="demo">Esquema de mosaico, con los departamentos ubicados de forma aproximada. En la app, el mapa interactivo usa la ubicación de cada productor con un radio aproximado para cuidar su privacidad.</p>
+      <p class="demo">Mapa esquemático: los puntos marcan la zona de cada productor de forma aproximada. El botón «Cómo llegar con Google Maps» abre la ubicación que cada productor real autorizó a publicar.</p>
     </div>
   </div>
 </div></section>
@@ -56,13 +59,37 @@
 <footer id="contacto"><div class="wrap">
   <div class="fgrid">
     <div><span class="lg flogo" role="img" aria-label="Logo de Ruta Verde"></span><p><b>Ruta Verde</b><br>Conectamos orígenes, elegimos futuro.</p></div>
-    <div><h4>Navegá</h4><a href="../">Inicio</a><a href="../mapa/">Mapa</a><a href="../productores/">Productores</a><a href="../confianza/">Confianza</a><a href="../preguntas/">Preguntas</a><a href="../proyecto/">Proyecto</a></div>
+    <div><h4>Navegá</h4><a href="../">Inicio</a><a href="../mapa/">Mapa</a><a href="../productores/">Productores</a><a href="../confianza/">Confianza</a><a href="../preguntas/">Preguntas</a><a href="../proyecto/">Proyecto</a><a href="../terminos/">Términos y condiciones</a></div>
     <div><h4>Contacto</h4><p>Proyecto educativo de la Escuela Superior de Comercio Villa Muñoz (UTU-ETP), Montevideo. Las consultas se canalizan a través de la institución.</p><p><a href="https://www.instagram.com/proyecto.rutaverde/" target="_blank" rel="noopener">Instagram: @proyecto.rutaverde</a></p></div>
     <div id="privacidad"><h4>Privacidad</h4><p>Esta demostración no guarda ni envía datos personales. En la versión real, Ruta Verde cumple la Ley N.º 18.331 de protección de datos personales: la ubicación se usa solo para navegar y cada productor acepta de forma expresa qué datos se muestran al público.</p></div>
   </div>
   <p>Ruta Verde: conexión digital para productores rurales de Uruguay. Proyecto final de egreso 2026, UTU-ETP / Escuela Superior de Comercio Villa Muñoz. Los productores marcados como «Productor real» participan con su autorización; el resto de los productores, las valoraciones y los precios son ejemplos ficticios.</p>
   <p><b>Declaración de uso de IA.</b> Esta web se armó con ayuda de IA: Claude (Anthropic) a partir del proyecto de egreso, con los colores y el logo de Ruta Verde. Los datos, el contenido y la autoría del proyecto son de Mariana Maciel, Yamila Bardallo, Verónica Airaudo y Thiago Guedes. Las fotos y los videos de los productores los aportó el equipo del proyecto, con autorización de las personas que aparecen.</p>
 </div></footer>
+<div class="bienv" id="bienv" hidden>
+  <div class="bienv-in" role="dialog" aria-modal="true" aria-labelledby="bv-t">
+    <div id="bv-1">
+      <div class="bv-logo"><span class="lg" role="img" aria-label="Logo de Ruta Verde. Conectamos orígenes, elegimos futuro."></span><p>Productos y experiencias de campo, directo de las familias que los producen.</p></div>
+      <h2 id="bv-t" tabindex="-1">¿Cómo vas a usar Ruta Verde?</h2>
+      <button class="rol" type="button" id="bv-cli"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 7h14l-1.5 9h-11z"/><path d="M9 7a3 3 0 0 1 6 0"/><circle cx="9" cy="20" r="1"/><circle cx="16" cy="20" r="1"/></svg></span><span><b>Soy cliente o turista</b><span>Quiero encontrar productos y experiencias de campo</span></span></button>
+      <a class="rol" href="../productores/#registro"><span class="ic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V11"/><path d="M12 11c0-4 3-6 7-6 0 4-3 6-7 6Z"/><path d="M12 14c0-3-2-5-6-5 0 3 2 5 6 5Z"/><path d="M4 21h16"/></svg></span><span><b>Soy productor</b><span>Quiero mostrar mi finca y vender directo</span></span></a>
+    </div>
+    <div id="bv-2" hidden>
+      <button class="bv-back" type="button" id="bv-volver">‹ Volver</button>
+      <h2 id="bv-t2" tabindex="-1">Términos y condiciones</h2>
+      <p class="demo" style="margin:0 0 10px">Leelos antes de seguir.</p>
+      <div class="terms" tabindex="0" role="region" aria-label="Texto de los términos y condiciones">
+<h4>Qué es Ruta Verde</h4><p>Ruta Verde SAS es una vitrina digital que conecta productores familiares con consumidores y turistas. No vende productos ni cobra comisión por las ventas (Ley 17.250 de Defensa del Consumidor).</p>
+<h4>Tus datos personales</h4><p>Tratamos tus datos según la Ley 18.331 de Protección de Datos Personales. Vos decidís qué se muestra. La ubicación de cada finca se muestra aproximada hasta que se concreta un contacto.</p>
+<h4>Compras y pagos</h4><p>Los precios, el pago y la entrega se acuerdan directamente entre el productor y quien compra.</p>
+<h4>Opiniones</h4><p>Las reseñas se revisan antes de publicarse. Podés denunciar contenido falso o inapropiado.</p>
+<h4>Ley aplicable</h4><p>Rigen las leyes de Uruguay y los tribunales de Montevideo.</p>
+      </div>
+      <label class="switch"><input type="checkbox" id="bv-ok"> Leí y acepto los términos y condiciones y la política de privacidad</label>
+      <button class="btn bv-go" type="button" id="bv-go" disabled>Aceptar y ver el mapa</button>
+    </div>
+  </div>
+</div>
 <script src="../assets/app.js"></script>
 </body>
 </html>

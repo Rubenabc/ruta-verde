@@ -440,3 +440,69 @@ main section:first-child{padding-top:34px}
 .hero2 .box{min-height:660px}
 .hero2 img.bgart{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 @media (max-width:760px){.hero2 .box{min-height:0}.hero2 img.bgart{position:static;order:2;display:block;width:100%;height:360px;object-position:50% 50%}}
+
+/* ---- mapa geográfico (Montevideo y Canelones / Todo Uruguay) ---- */
+.gseg{display:flex;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;margin:0 auto 12px;width:max-content;max-width:100%}
+.gseg button{font:inherit;font-weight:700;font-size:.85rem;border:0;border-radius:999px;padding:7px 14px;background:transparent;color:var(--muted);cursor:pointer}
+.gseg button[aria-pressed="true"]{background:#0E401F;color:#fff}
+.gmap{border-radius:12px;overflow:hidden;border:1px solid var(--line);background:#C9DDE3;max-width:520px;margin:0 auto}
+.gmap svg{display:block;width:100%;height:auto}
+.g-vec{fill:#EDEBE2}.g-agua{fill:#C9DDE3}.g-uy{fill:#E4EDD8;stroke:#B9CBA8;stroke-width:1.2}
+.g-rio{fill:none;stroke:#C9DDE3;stroke-width:3}.g-rio2{fill:none;stroke:#C9DDE3;stroke-width:5;stroke-linecap:round}
+.g-ruta{fill:none;stroke:#FBFCF8;stroke-width:4;stroke-linecap:round}.g-ruta-b{fill:none;stroke:#D3E0C6;stroke-width:6;stroke-linecap:round}
+.g-ciudad{fill:#D3E0C6;opacity:.9}.g-dot{fill:#6B7A70}
+.g-lugar{font-family:var(--body);font-size:11px;fill:#55635A}.g-lugar.sm{font-size:9.5px}
+.g-agua-t{font-family:var(--serif);font-style:italic;font-size:13px;fill:#55635A;opacity:.8}
+.g-pais{font-family:var(--body);font-size:11px;letter-spacing:.12em;text-transform:uppercase;fill:#8A9089}
+.g-caja{fill:none;stroke:#0E401F;stroke-dasharray:4 3;stroke-width:1.2}
+.gpin{cursor:pointer;outline:none}
+.gpin .lh,.gpin .lf{fill:#659A31}.gpin .rh,.gpin .lf2{fill:#0E401F}.gpin .ring{fill:#0E401F;opacity:.35}
+.gpin.ej .lh{fill:#B3D38A}.gpin.ej .rh{fill:#79A84A}.gpin.ej .lf{fill:#8DBA5A}.gpin.ej .lf2{fill:#5E9032}
+.gpin .halo{fill:#D9A93A;opacity:.35}
+.gpin:hover>g,.gpin:focus-visible>g{filter:drop-shadow(0 2px 3px rgba(0,0,0,.35))}
+.gpin:focus-visible .halo{opacity:.6}
+.gley{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:10px;font-size:.85rem;color:var(--muted)}
+.gdot{display:inline-block;width:12px;height:12px;border-radius:50%;vertical-align:-1px;margin-right:6px;background:linear-gradient(90deg,#659A31 50%,#0E401F 50%)}
+.gdot.ej{background:linear-gradient(90deg,#B3D38A 50%,#79A84A 50%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .gmap{filter:brightness(.82) saturate(.9)}}
+@media (max-width:760px){
+  .mapa>div:last-child{order:-1}
+  #mapa .pop{position:static;box-shadow:none}
+  .gseg button{padding:7px 11px;font-size:.8rem}
+}
+/* ---- registro: planes y términos ---- */
+#regf h3{margin:18px 0 8px}#regf h3:first-child{margin-top:0}
+.planes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.plan{position:relative;display:block;border:2px solid var(--line);border-radius:16px;padding:16px 16px 12px;background:var(--surface);cursor:pointer}
+.plan input{position:absolute;top:16px;right:16px;width:20px;height:20px;accent-color:#0E401F}
+.plan:has(input:checked){border-color:#0E401F;background:var(--leaf-l)}
+.plan:has(input:focus-visible){outline:3px solid var(--leaf);outline-offset:2px}
+.plan .pn{display:block;font-family:var(--head);font-weight:800;color:var(--forest);font-size:1.05rem}
+.plan .pp{display:block;font-family:var(--head);font-weight:800;font-size:1.6rem;margin-top:4px}
+.plan .pu{display:block;color:var(--muted)}
+.plan ul{margin:10px 0 0;padding-left:18px;font-size:.92rem}
+.plan .rib{position:absolute;top:-11px;left:14px;background:#D9A93A;color:#1B2A1A;font-size:.75rem;font-weight:800;border-radius:999px;padding:3px 10px}
+.terms{max-height:240px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:4px 16px 10px;background:var(--surface);margin-bottom:10px;font-size:.93rem}
+.terms h4,.tpage h4{font-family:var(--head);color:var(--forest);margin:14px 0 4px}
+.terms p,.tpage p{margin:0 0 6px}
+#g-go:disabled{opacity:.45;cursor:not-allowed}
+#g-msg .res b:not(.big){color:#B3261E}
+/* ---- bienvenida y términos del mapa ---- */
+html.bv-open,html.bv-open body{overflow:hidden}
+.bienv{position:fixed;inset:0;z-index:100;background:rgba(10,24,14,.55);display:grid;place-items:center;padding:16px}
+.bienv[hidden]{display:none}
+.bienv-in{background:var(--bg);color:var(--ink);border-radius:24px;width:min(460px,100%);max-height:calc(100vh - 32px);overflow:auto;padding:24px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+.bienv-in h2{font-size:1.8rem;margin:18px 0 12px;outline:none}
+.bv-logo{background:var(--leaf-l);border-radius:20px;padding:22px 18px 16px;text-align:center}
+.bv-logo .lg{width:150px;height:150px;margin:0 auto 10px;background-color:#fff}
+.bv-logo p{margin:0;color:var(--forest);font-weight:700}
+.rol{display:flex;gap:14px;align-items:center;width:100%;text-align:left;font:inherit;color:inherit;text-decoration:none;background:var(--surface);border:1.5px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:10px;cursor:pointer}
+.rol:hover,.rol:focus-visible{border-color:var(--forest)}
+.rol .ic{flex:none;width:52px;height:52px;border-radius:14px;background:var(--leaf-l);color:var(--forest);display:grid;place-items:center}
+.rol .ic svg{width:26px;height:26px}
+.rol b{display:block;font-family:var(--head);font-size:1.1rem;color:var(--forest)}
+.rol span span{color:var(--muted);font-size:.95rem}
+.bv-back{font:inherit;font-weight:700;color:var(--forest);background:none;border:0;padding:4px 0;cursor:pointer}
+#bv-2 h2{margin-top:6px}
+.bv-go{width:100%;background:#0E401F;color:#fff}
+.bv-go:disabled{opacity:.45;cursor:not-allowed}
